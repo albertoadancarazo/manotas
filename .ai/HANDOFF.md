@@ -21,6 +21,11 @@ date: 2026-10-26
 - npm audit: cero vulnerabilidades al cerrar esta revisión.
 - No se ha hecho despliegue ni migración remota.
 
+## Transporte a GitHub
+- Subida por API: 20 commits reproducidos con referencia Original-local-commit; hashes nuevos.
+- El worktree original conserva hashes locales antiguos; no asumir sincronía por el nombre de rama.
+- La copia de reparación está alineada con la rama remota; historial local previo conservado en chatgpt/local-before-api-upload.
+
 ## Continuar
 Leer STATE y NEXT; README contiene comandos reproducibles y arranque local.
 El worktree original de OpenCode se conservó; recuperar la rama remota antes de continuar allí.
