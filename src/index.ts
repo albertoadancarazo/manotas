@@ -104,7 +104,7 @@ async function requireTechAdminAuth(request: Request, env: Env) {
   return session;
 }
 
-async function customerPortal(request: Request, env: Env, token: string) {
+export async function customerPortal(request: Request, env: Env, token: string) {
   const order = await getPublicOrder(env, token);
   if (!order) return new Response('Orden no encontrada', { status: 404, headers: { 'content-type': 'text/plain; charset=utf-8' }});
   const [timeline, photos] = await Promise.all([
@@ -115,7 +115,7 @@ async function customerPortal(request: Request, env: Env, token: string) {
   return new Response(html, { headers: { 'content-type': 'text/html; charset=utf-8' }});
 }
 
-async function insurerPortal(request: Request, env: Env, token: string) {
+export async function insurerPortal(request: Request, env: Env, token: string) {
   const order = await env.DB.prepare(`
     SELECT wo.*, v.plate, v.make, v.model FROM work_orders wo
     JOIN vehicles v ON v.id = wo.vehicle_id
