@@ -3,6 +3,7 @@ import { authRoutes } from './routes/auth';
 import { qrRoutes } from './routes/qr';
 const { technicianRoutes } = await import('./routes/technician');
 const { adminRoutes } = await import('./routes/admin');
+const { adminDashboardRoutes } = await import('./routes/admin-dashboard');
 const { insurerRoutes } = await import('./routes/insurer');
 const { uploadRoutes } = await import('./routes/upload');
 const { mobileRoutes } = await import('./routes/mobile');
@@ -212,6 +213,22 @@ export default {
       }
       if (url.pathname === '/api/admin/stats' && request.method === 'GET') {
         return adminRoutes.getStats(request, env);
+      }
+      if (url.pathname === '/api/admin/users' && request.method === 'POST') {
+        return adminDashboardRoutes.createUser(request, env);
+      }
+    }
+
+    // Admin dashboard routes (require ADMIN)
+    if (!(adminAuth instanceof Response)) {
+      if (url.pathname === '/admin/dashboard' && request.method === 'GET') {
+        return adminDashboardRoutes.dashboard(request, env);
+      }
+      if (url.pathname === '/admin/dashboard/orders' && request.method === 'GET') {
+        return adminDashboardRoutes.orders(request, env);
+      }
+      if (url.pathname === '/admin/dashboard/users' && request.method === 'GET') {
+        return adminDashboardRoutes.users(request, env);
       }
     }
 
