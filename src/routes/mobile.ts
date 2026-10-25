@@ -1,3 +1,4 @@
+import { orderAccess, escapeHtml } from '../security';
 import { verifySession } from "../auth";
 import { queries } from "../db/queries";
 import { json } from "../utils/response";
@@ -282,6 +283,7 @@ const mobileTemplate = `<!DOCTYPE html>
   <div class="toast" id="toast"></div>
 
   <script>
+    function esc(value) { const span = document.createElement('span'); span.textContent = String(value ?? ''); return span.innerHTML.replaceAll('"','&quot;').replaceAll("'",'&#39;'); }
     const ORDER_UUID = "{{ORDER_UUID}}";
     const API_BASE = "/api/technician/orders";
     
@@ -345,7 +347,7 @@ const mobileTemplate = `<!DOCTYPE html>
         label.textContent = 'Orden completada';
       }
 
-      document.querySelector('.header h1').textContent = \`\${o.vehicle?.plate || ''} \${o.vehicle?.make || ''} \${o.vehicle?.model || ''}\`;
+      document.querySelector('.header h1').textContent = \`\${o.plate || ''} \${o.make || ''} \${o.model || ''}\`;
       document.querySelector('.badge').textContent = STATUS_ORDER[currentIdx]?.label || o.current_status;
       document.querySelector('.badge').className = 'badge badge-' + (STATUS_ORDER[currentIdx]?.class || 'recibido');
       document.querySelector('.card-value').textContent = o.reference || '—';
@@ -369,9 +371,9 @@ const mobileTemplate = `<!DOCTYPE html>
           <div class="timeline-line" style="\${i === events.length - 1 ? 'display:none' : ''}"></div>
           <div class="timeline-content">
             <div class="timeline-time">\${new Date(e.created_at).toLocaleString('es-ES')}</div>
-            <div class="timeline-status">\${e.new_status}</div>
-            \${e.note_public ? \`<div class="timeline-note">\${e.note_public}</div>\` : ''}
-            \${e.note_internal ? \`<div class="timeline-note" style="color:var(--naranja);font-size:12px;">[Interno] \${e.note_internal}</div>\` : ''}
+            <div class="timeline-status">\${esc(e.new_status)}</div>
+            \${e.note_public ? \`<div class="timeline-note">\${esc(e.note_public)}</div>\` : ''}
+            \${e.note_internal ? \`<div class="timeline-note" style="color:var(--naranja);font-size:12px;">[Interno] \${esc(e.note_internal)}</div>\` : ''}
           </div>
         </div>
       \`).join('');
@@ -385,9 +387,9 @@ const mobileTemplate = `<!DOCTYPE html>
       }
       container.innerHTML = photos.map(p => \`
         <div class="photo-item">
-          <img src="/api/photos/\${p.id}/signed-url" alt="\${p.category}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <img src="/api/photos/\${esc(p.id)}/content" alt="\${esc(p.category)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
           <div style="display:none;align-items:center;justify-content:center;height:100%;color:var(--gris-medio);font-size:12px;">Sin imagen</div>
-          <div class="photo-category">\${p.category}</div>
+          <div class="photo-category">\${esc(p.category)}</div>
         </div>
       \`).join('');
     }
@@ -555,6 +557,8 @@ export const mobileRoutes = {
     const auth = await requireTechAdminAuth(request, env);
     if (auth instanceof Response) return auth;
     
+    const access = await orderAccess(request, env, uuid);
+    if (access instanceof Response) return access;
     const orderData = await queries.getOrderWithDetails(env.DB, uuid);
     if (!orderData) return new Response("Orden no encontrada", { status: 404, headers: { "content-type": "text/plain; charset=utf-8" }});
     
@@ -573,7 +577,7 @@ export const mobileRoutes = {
       ESTIMATED_DELIVERY: String(order.estimated_delivery_date || "—")
     };
     
-    const html = renderTemplate(mobileTemplate, templateData);
+    const html = renderTemplate(mobileTemplate, Object.fromEntries(Object.entries(templateData).map(([k,v]) => [k, escapeHtml(v)])));
     return new Response(html, {
       headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" }
     });

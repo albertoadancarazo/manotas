@@ -20,10 +20,11 @@ export function validateUpload(file: File): { ok: boolean; error?: string } {
   return { ok: true };
 }
 
-export function canAccessPhoto(visibility: string, requesterRole: string, isOwner: boolean): boolean {
-  if (visibility === "INTERNAL_ONLY") return isOwner && (requesterRole === "TECHNICIAN" || requesterRole === "ADMIN");
-  if (visibility === "CLIENT_VISIBLE") return requesterRole === "TECHNICIAN" || requesterRole === "ADMIN" || isOwner;
-  if (visibility === "INSURER_VISIBLE") return requesterRole === "TECHNICIAN" || requesterRole === "ADMIN" || requesterRole === "INSURER";
-  if (visibility === "CLIENT_AND_INSURER") return true;
+// Scope must already be checked against the order, not just the photo author.
+export function canAccessPhoto(visibility: string, requesterRole: string, hasOrderAccess: boolean): boolean {
+  if (!hasOrderAccess) return false;
+  if (requesterRole === 'ADMIN' || requesterRole === 'TECHNICIAN') return true;
+  if (requesterRole === 'INSURER') return ['INSURER_VISIBLE','CLIENT_AND_INSURER'].includes(visibility);
+  if (requesterRole === 'CLIENT') return ['CLIENT_VISIBLE','CLIENT_AND_INSURER'].includes(visibility);
   return false;
 }

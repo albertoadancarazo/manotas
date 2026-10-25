@@ -357,7 +357,7 @@ function heading(text: string, yPos: number): number {
   return yPos;
 }
 
-function getStatusColor(status: string): [number, number, number] {
+function getStatusColor(status: string) {
   const statusColors: Record<string, [number, number, number]> = {
     RECEPCIONADO: [0.15, 0.39, 0.92],      // blue
     PENDIENTE_PERITACION: [1, 0.42, 0],     // orange
@@ -432,7 +432,7 @@ export async function generateWorkOrderSummaryPDF(data: InsurerReportData): Prom
 
   data.timeline.slice(0, 5).forEach(event => {
     const color = getStatusColor(event.status);
-    page.drawRectangle({ x: MARGIN, y: y - 12, width: 100, height: 16, color: rgb(...getStatusColor(event.status)) });
+    page.drawRectangle({ x: MARGIN, y: y - 12, width: 100, height: 16, color: getStatusColor(event.status) });
     page.drawText(event.status, { x: MARGIN + 5, y: y - 8, font: helveticaBold, size: 8, color: COLORS.white });
     page.drawText(new Date(event.createdAt).toLocaleDateString('es-ES'), { x: MARGIN + 110, y: y - 4, font: helvetica, size: 9, color: COLORS.mediumGray });
     if (event.notePublic) {

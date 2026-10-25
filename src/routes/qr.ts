@@ -2,6 +2,7 @@ import { verifySession } from "../auth";
 import { generateToken, encodeQRPayload } from "../utils/crypto";
 import { json } from "../utils/response";
 import type { Env } from "../index";
+import { orderAccess } from '../security';
 import QRCode from "qrcode";
 
 async function requireTechAdminAuth(request: Request, env: Env): Promise<{ userId: string; role: string } | Response> {
@@ -20,6 +21,9 @@ export const qrRoutes = {
     
     const body = await request.json() as { workOrderId: string; role: "technician" | "customer" | "insurer" };
     const { workOrderId, role } = body;
+    if (!['technician','customer','insurer'].includes(role) || typeof workOrderId !== 'string') return json({ error: 'invalid_input' }, 400);
+    const access = await orderAccess(request, env, workOrderId, true);
+    if (access instanceof Response) return access;
     
     const order = await env.DB.prepare("SELECT uuid FROM work_orders WHERE id = ? AND active = 1")
       .bind(workOrderId).first() as { uuid: string } | null;
@@ -30,9 +34,9 @@ export const qrRoutes = {
     
     const host = new URL(request.url).host;
     const basePath = role === "technician" ? "taller/orden" : role === "customer" ? "seguimiento" : "aseguradora";
-    const qrUrl = `https://${host}/${basePath}/${order.uuid}?t=${token}`;
+    const qrUrl = `${new URL(request.url).origin}/${basePath}/${role === "technician" ? order.uuid : token}`;
     
-    const dataUrl = await QRCode.toDataURL(qrUrl, { width: 256, margin: 2 });
+    const dataUrl = await QRCode.toString(qrUrl, { type: 'svg', width: 256, margin: 2 }).then(svg => 'data:image/svg+xml;base64,' + btoa(svg));
     
     if (role === "customer") {
       await env.DB.prepare("UPDATE work_orders SET public_token = ? WHERE id = ?")

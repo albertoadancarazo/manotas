@@ -17,7 +17,7 @@ export const insurerRoutes = {
     if (auth instanceof Response) return auth;
     const url = new URL(request.url);
     const status = url.searchParams.get("status") || undefined;
-    let sql = `SELECT wo.*, v.plate, v.make, v.model FROM work_orders wo JOIN vehicles v ON v.id = wo.vehicle_id WHERE wo.insurer_id = ? AND wo.active = 1`;
+    let sql = `SELECT wo.uuid, wo.reference, wo.current_status, wo.entry_date, wo.estimated_delivery_date, v.plate, v.make, v.model FROM work_orders wo JOIN vehicles v ON v.id = wo.vehicle_id WHERE wo.insurer_id = (SELECT insurer_id FROM users WHERE id = ? AND active = 1) AND wo.active = 1`;
     const args: any[] = [auth.userId];
     if (status) {
       sql += ` AND wo.current_status = ?`;
@@ -32,17 +32,17 @@ export const insurerRoutes = {
     const auth = await requireInsurerAuth(request, env);
     if (auth instanceof Response) return auth;
     const order = await env.DB.prepare(`
-      SELECT wo.*, v.plate, v.make, v.model, v.year, v.color
+      SELECT wo.id, wo.uuid, wo.reference, wo.current_status, wo.entry_date, wo.estimated_delivery_date, wo.claim_number, v.plate, v.make, v.model, v.year, v.color
       FROM work_orders wo
       JOIN vehicles v ON v.id = wo.vehicle_id
-      WHERE wo.uuid = ? AND wo.insurer_id = ? AND wo.active = 1
+      WHERE wo.uuid = ? AND wo.insurer_id = (SELECT insurer_id FROM users WHERE id = ? AND active = 1) AND wo.active = 1
     `).bind(uuid, auth.userId).first();
     if (!order) return json({ error: "not_found" }, 404);
     const [events, photos] = await Promise.all([
       env.DB.prepare(`
         SELECT new_status, note_public, created_at
         FROM work_order_events
-        WHERE work_order_id = ? AND note_public IS NOT NULL
+        WHERE work_order_id = ?
         ORDER BY created_at ASC
       `).bind(order.id).all(),
       env.DB.prepare(`

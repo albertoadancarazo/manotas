@@ -1,3 +1,4 @@
+import { orderAccess } from '../security';
 import { verifySession } from "../auth";
 import { json } from "../utils/response";
 import type { Env } from "../index";
@@ -140,6 +141,8 @@ function buildInsurerPortalReportData(order: any, events: any[], photos: any[], 
 
 export const pdfRoutes = {
   async getInsurerReport(request: Request, env: Env, uuid: string) {
+    const access = await orderAccess(request, env, uuid);
+    if (access instanceof Response) return access;
     const auth = await requireInsurerAuth(request, env);
     if (auth instanceof Response) return auth;
 
@@ -150,7 +153,7 @@ export const pdfRoutes = {
     const events = orderData.events || [];
     const photos = orderData.photos || [];
 
-    const reportData = buildInsurerReportData(order, events, photos, uuid);
+    const reportData = buildInsurerReportData(order, events.map(({note_internal, ...e}) => e), photos.filter(p => ['INSURER_VISIBLE','CLIENT_AND_INSURER'].includes(String(p.visibility))), uuid);
 
     const pdfBytes = await generateInsurerReportPDF(reportData);
     
@@ -163,6 +166,8 @@ export const pdfRoutes = {
   },
 
   async getSummaryPDF(request: Request, env: Env, uuid: string) {
+    const access = await orderAccess(request, env, uuid);
+    if (access instanceof Response) return access;
     const auth = await requireTechAdminAuth(request, env);
     if (auth instanceof Response) return auth;
 
@@ -197,9 +202,9 @@ export const pdfRoutes = {
 
     const [events, photos] = await Promise.all([
       env.DB.prepare(`
-        SELECT new_status, note_public, note_internal, created_at
+        SELECT new_status, note_public, created_at
         FROM work_order_events
-        WHERE work_order_id = ? AND note_public IS NOT NULL
+        WHERE work_order_id = ?
         ORDER BY created_at ASC
       `).bind(order.id).all(),
       env.DB.prepare(`
@@ -210,32 +215,7 @@ export const pdfRoutes = {
       `).bind(order.id).all()
     ]);
 
-    const reportData = {
-      workOrder: {
-        reference: order.reference,
-        status: order.current_status,
-        entryDate: order.entry_date,
-        estimatedDeliveryDate: order.estimated_delivery_date,
-        vehicle: {
-          plate: order.plate,
-          make: order.make,
-          model: order.model,
-          year: order.year,
-          color: order.color
-        },
-        customerName: order.customer_name,
-        customerPhone: order.customer_phone,
-        customerEmail: order.customer_email,
-        insurerName: order.insurer_name,
-        claimNumber: order.claim_number
-      },
-      timeline: buildTimeline(events),
-      photos: buildPhotos(photos, ""),
-      incidents: [],
-      generatedAt: new Date().toISOString(),
-      generatedBy: "insurer-portal-" + token
-    };
-
+    const reportData = buildInsurerPortalReportData(order, events.results, photos.results, "portal");
     const pdfBytes = await generateInsurerReportPDF(reportData);
     
     return new Response(pdfBytes as BodyInit, {

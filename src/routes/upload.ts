@@ -1,5 +1,7 @@
+import { orderAccess } from '../security';
+import { signedPhotoUrl } from './photo-content';
 import { verifySession } from "../auth";
-import { putPhoto, getSignedUrl, validateUpload, canAccessPhoto } from "../utils/r2";
+import { putPhoto, validateUpload } from "../utils/r2";
 import { queries } from "../db/queries";
 import { json } from "../utils/response";
 import { generateUUID } from "../utils/crypto";
@@ -19,6 +21,7 @@ export const uploadRoutes = {
     const auth = await requireTechAdminAuth(request, env);
     if (auth instanceof Response) return auth;
     
+    if (!request.headers.get('content-type')?.startsWith('multipart/form-data')) return json({error:'multipart_required'},415);
     const formData = await request.formData();
     const file = formData.get("file") as File;
     const workOrderId = formData.get("workOrderId") as string;
@@ -26,16 +29,23 @@ export const uploadRoutes = {
     const category = formData.get("category") as string;
     const visibility = formData.get("visibility") as "INTERNAL_ONLY" | "CLIENT_VISIBLE" | "INSURER_VISIBLE" | "CLIENT_AND_INSURER" || "INTERNAL_ONLY";
     
-    if (!file || !workOrderId || !category) {
+    if (!(file instanceof File) || !workOrderId || !category) {
       return json({ error: "missing_fields" }, 400);
     }
     
+    const access = await orderAccess(request, env, workOrderId, true);
+    if (access instanceof Response) return access;
+    if (!['INTERNAL_ONLY','CLIENT_VISIBLE','INSURER_VISIBLE','CLIENT_AND_INSURER'].includes(visibility)) return json({ error: 'invalid_visibility' }, 400);
+    if (eventId) {
+      const event = await env.DB.prepare('SELECT id FROM work_order_events WHERE id = ? AND work_order_id = ?').bind(eventId, workOrderId).first();
+      if (!event) return json({ error: 'invalid_event' }, 400);
+    }
     const validation = validateUpload(file);
     if (!validation.ok) return json({ error: validation.error }, validation.error === "file_too_large" ? 413 : 415);
     
     const arrayBuffer = await file.arrayBuffer();
     const objectKey = `photos/${workOrderId}/${generateUUID()}-${file.name}`;
-    const thumbnailKey = objectKey.replace(/\.[^.]+$/, "-thumb.webp");
+    const thumbnailKey = null;
     
     await putPhoto(env.PHOTOS, objectKey, arrayBuffer, file.type);
     
@@ -43,24 +53,10 @@ export const uploadRoutes = {
     await env.DB.prepare(`
       INSERT INTO photos (id, work_order_id, event_id, technician_id, category, object_key, thumbnail_key, visibility, file_hash)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).bind(photoId, workOrderId, eventId, auth.userId, category, objectKey, thumbnailKey, visibility, "").run();
+    `).bind(photoId, workOrderId, eventId, auth.userId, category, objectKey, thumbnailKey, visibility, Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', arrayBuffer)), b => b.toString(16).padStart(2,'0')).join('')).run();
     
     return json({ id: photoId, objectKey, thumbnailKey }, 201);
   },
 
-  async signedUrl(request: Request, env: Env, photoId: string) {
-    const auth = await verifySession(env, request);
-    if (!auth) return json({ error: "unauthorized" }, 401);
-    
-    const photo = await env.DB.prepare("SELECT * FROM photos WHERE id = ?").bind(photoId).first() as any;
-    if (!photo) return json({ error: "not_found" }, 404);
-    
-    const isOwner = photo.technician_id === auth.userId;
-    if (!canAccessPhoto(photo.visibility, auth.role, isOwner)) {
-      return json({ error: "forbidden" }, 403);
-    }
-    
-    const url = await getSignedUrl(env.PHOTOS, photo.object_key);
-    return json({ signedUrl: url });
-  }
+  async signedUrl(request: Request, env: Env, photoId: string) { return signedPhotoUrl(request, env, photoId); }
 };

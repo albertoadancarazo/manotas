@@ -47,13 +47,13 @@ export const queries = {
     if (!order) return null;
     
     const eventId = crypto.randomUUID();
-    await db.prepare(`
+    await db.batch([db.prepare(`
       INSERT INTO work_order_events (id, work_order_id, previous_status, new_status, technician_id, note_internal, note_public)
       VALUES (?, ?, ?, ?, ?, ?, ?)
-    `).bind(eventId, order.id, order.current_status, data.newStatus, data.technicianId, data.noteInternal, data.notePublic).run();
+    `).bind(eventId, order.id, order.current_status, data.newStatus, data.technicianId, data.noteInternal ?? null, data.notePublic ?? null),
     
-    await db.prepare("UPDATE work_orders SET current_status = ? WHERE id = ?")
-      .bind(data.newStatus, order.id).run();
+    db.prepare("UPDATE work_orders SET current_status = ? WHERE id = ?")
+      .bind(data.newStatus, order.id)]);
     
     return { eventId, orderId: order.id };
   },
