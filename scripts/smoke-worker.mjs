@@ -28,4 +28,3 @@ try {
  assert.equal(image.status,200);assert.equal(image.headers.get('content-type'),'image/jpeg');
  console.log('Worker smoke passed: real workerd + D1 migrations + login + QR + R2 upload/read.');
 } finally {await mf.dispose();}
-
