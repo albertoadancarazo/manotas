@@ -10,8 +10,12 @@
     "db:migrate:remote": "wrangler d1 migrations apply manotas-db --remote"
   },
   "devDependencies": {
-    "wrangler": "^4.0.0",
+    "@cloudflare/workers-types": "^5.20261019.1",
     "typescript": "^5.9.0",
-    "@cloudflare/workers-types": "^4.20261001.0"
+    "wrangler": "^4.0.0"
+  },
+  "dependencies": {
+    "@node-rs/argon2": "^2.2.2",
+    "jose": "^6.2.12"
   }
 }
