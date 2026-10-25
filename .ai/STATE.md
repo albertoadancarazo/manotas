@@ -1,33 +1,40 @@
-# STATE — Manotas
+# STATE - Manotas
 
-## Actual
-- Repo inicializado el 2026-10-20.
-- Rama de trabajo: `chatgpt/bootstrap`.
-- Arquitectura base en repo: Cloudflare Workers + D1 + R2.
-- Módulo prioritario: seguimiento de reparaciones por QR.
-- Esquema D1 inicial creado en `migrations/0001_initial.sql`.
-- Worker API inicial creado en `src/index.ts`.
-- Configuración Cloudflare plantilla creada en `wrangler.jsonc`.
-- Especificación funcional en `docs/QR-TRACKING-SPEC.md`.
-
-## Producto
-- QR identifica una orden de trabajo, no simplemente el vehículo.
-- Un vehículo puede tener múltiples órdenes históricas.
-- Roles previstos: admin, técnico, cliente, aseguradora.
-- Fotos con visibilidad: INTERNAL_ONLY, CLIENT_VISIBLE, INSURER_VISIBLE, CLIENT_AND_INSURER.
-- Timeline de eventos append-only a nivel de aplicación.
-- API pública actual: `/api/health` y `/api/public/tracking/:token`.
-- Endpoints privados aún no expuestos hasta implementar autenticación/RBAC.
+## Código actual
+- Rama: chatgpt/bootstrap; corrección consolidada en 143a0e5.
+- Stack: Workers + D1 + R2; demo comercial en public/demo/index.html.
+- Autenticación Argon2id portable, cookies HttpOnly/Secure, JWT con sesión D1 de 24 horas.
+- Logout revoca sesión; usuarios inactivos y cambios de rol se consultan en servidor.
+- Usuarios aseguradora enlazados por users.insurer_id (migración 0004).
+- Lectura/mutación de órdenes y fotos exige asignación o rol ADMIN.
+- Generación QR SVG sin canvas; rutas de consulta usan token y regeneración lo rota.
+- Fotos privadas servidas por Worker según orden, audiencia y visibilidad.
+- URLs firmadas de 15 minutos siguen exigiendo sesión autorizada.
+- Fotos nuevas INTERNAL_ONLY por defecto; SHA-256 guardado; sin miniaturas ficticias.
+- Eventos y cambio de estado se guardan en batch transaccional D1.
+- Portales muestran estados históricos y fotos autorizadas sin notas internas.
+- Escape HTML en portales, móvil y dashboard; rechazo de Origin ajeno en mutaciones.
+- Dashboard de administración, creación de usuarios, login y listado técnico presentes.
+- PDF por técnico/admin, cuenta aseguradora o token; filtro de notas y fotos por audiencia.
+- El PDF incluye metadatos de fotos, no sus binarios.
 
 ## Infraestructura
-- No hay deploy configurado todavía.
-- No hay D1/R2 creados todavía.
-- `wrangler.jsonc` contiene placeholder de `database_id`.
-- No hay dominio conectado todavía.
-- No hay secretos en repo.
+- ASSETS configurado para public; / sirve la demo.
+- database_id sigue siendo ejemplo; no se ha provisionado ni comprobado infraestructura remota.
+- No se han ejecutado despliegues ni migraciones remotas en esta revisión.
+- JWT_SECRET y proveedores se configuran fuera del repo; no hay credenciales de prueba por defecto.
+- Notificaciones: módulos opcionales conservados y tipos corregidos; no activados en rutas/eventos.
 
-## Datos pendientes de validar antes de producción
-- Teléfono principal y horarios.
-- Servicios exactos y aseguradoras colaboradoras.
-- Política de retención de fotos/documentación.
-- Usuarios iniciales del taller.
+## Validación actual
+- npm run typecheck: pasa.
+- npm test: 10 pruebas de regresión pasan, SQLite real en memoria y bucket de prueba.
+- npm run build: bundle ESM browser/worker generado con esbuild WASM.
+- npm run test:worker: workerd/D1/R2 locales, migraciones, login, QR y fotos pasan.
+- npm audit: cero vulnerabilidades; undici fijado a 7.30.1 por override.
+- Node requerido: 24 o superior.
+- Los antiguos tests con mocks no son la suite activa; README lo distingue.
+- No realizada revisión visual en navegador/móvil ni validación del plan Cloudflare real.
+
+## Límites de producto
+- Pendiente alta integral de órdenes/vehículos desde interfaz y captación comercial conectada.
+- Pendiente activación segura de notificaciones y validación de datos comerciales/retención.

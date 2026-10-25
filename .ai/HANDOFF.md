@@ -1,33 +1,27 @@
-# HANDOFF — Manotas
+# HANDOFF - Manotas
 
-active_agent: chatgpt
+active_agent: none
 branch: chatgpt/bootstrap
-base_commit: 412d7ad1ff352fdf5c020ed63fb28b14601221da
-date: 2026-10-20
+base_commit: 143a0e51f79d604415407ad087baaf1ba9eb7f5b
+date: 2026-10-26
 
-## Estado inmediato
-- Repo inicializado con AGENTS.md en `main` por autorización explícita del usuario.
-- Todo el trabajo posterior vive en `chatgpt/bootstrap`.
-- `.ai/PROJECT.md`, STATE, NEXT y DECISIONS creados.
-- Arquitectura objetivo: Workers + D1 + R2.
-- Migración inicial: `migrations/0001_initial.sql`.
-- Worker base: `src/index.ts`.
-- Config Cloudflare plantilla: `wrangler.jsonc`.
-- Especificación QR: `docs/QR-TRACKING-SPEC.md`.
+## Relevo
+- Revisados y conservados los 18 commits locales previos.
+- Corregidos QR, fotos privadas, permisos por orden y sesiones revocables.
+- Dashboard ajustado a los arrays reales de la API; login y listado técnico añadidos.
+- PDF conectado al router y filtrado por audiencia; dependencia declarada.
+- Migración 0004 enlaza usuarios aseguradora con su organización.
+- ASSETS configurado; / sirve la demo comercial.
+- Notificaciones conservadas como módulos opcionales, sin envíos activados.
 
-## Decisiones clave
-- QR identifica orden de trabajo, no vehículo.
-- Eventos históricos no se sobrescriben.
-- Fotos privadas por defecto.
-- No exponer endpoints privados sin RBAC real.
+## Validación
+- TypeScript sin errores y bundle ESM generado con esbuild WASM.
+- 10 pruebas de regresión pasan con SQLite real en memoria.
+- Smoke workerd + D1 + R2: migraciones, login, QR, subida y lectura privada pasan.
+- npm audit: cero vulnerabilidades al cerrar esta revisión.
+- No se ha hecho despliegue ni migración remota.
 
-## Siguiente trabajo recomendado
-1. Implementar auth/RBAC.
-2. Crear endpoints técnicos de órdenes/eventos/fotos.
-3. Implementar subida R2 privada.
-4. Construir UI móvil del técnico y lector QR.
-5. Incorporar demo visual existente al repo.
-
-## Bloqueos
-- No crear D1/R2 ni desplegar sin aprobación humana.
-- `database_id` sigue como placeholder.
+## Continuar
+Leer STATE y NEXT; README contiene comandos reproducibles y arranque local.
+El worktree original de OpenCode se conservó; recuperar la rama remota antes de continuar allí.
+Infraestructura remota, configuración real y funciones aún pendientes: NEXT.

@@ -19,3 +19,13 @@ Workers + D1 + R2 como primera opción para minimizar coste y simplificar infrae
 ## D-005 — Separación portal técnico / cliente / aseguradora
 Status: ACCEPTED
 Los permisos se validan en servidor; ocultar campos en frontend nunca se considera control de acceso.
+
+## D-006 - Autenticación portable y revocable
+Status: ACCEPTED
+Argon2id sin addon nativo; JWT enlazado a sesión D1, usuario activo y rol actual.
+Evita incompatibilidad del addon Node en Workers y permite revocar acceso sin esperar expiración.
+
+## D-007 - Fotos mediante Worker privado
+Status: ACCEPTED
+Leer R2 por Worker con alcance de orden/audiencia y revalidación del token o sesión.
+La firma temporal no sustituye el permiso vigente y no convierte el bucket en público.
