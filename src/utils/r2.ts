@@ -1,6 +1,6 @@
-import type { R2Bucket } from "@cloudflare/workers-types";
+import type { PhotoStore } from './photo-store';
 
-export async function putPhoto(bucket: R2Bucket, key: string, data: ArrayBuffer, contentType: string) {
+export async function putPhoto(bucket: PhotoStore, key: string, data: ArrayBuffer, contentType: string) {
   await bucket.put(key, data, { 
     httpMetadata: { contentType }, 
     customMetadata: { uploadedAt: new Date().toISOString() }

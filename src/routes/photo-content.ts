@@ -1,4 +1,5 @@
 import { verifySession } from '../auth';
+import { photoStore } from '../utils/photo-store';
 import { orderAccess } from '../security';
 import { SignJWT, jwtVerify } from 'jose';
 import { json } from '../utils/response';
@@ -33,7 +34,7 @@ export async function photoContent(request: Request, env: Env, id: string) {
       if (payload.sub !== id) return new Response('Forbidden', { status: 403 });
     } catch { return new Response('Expired or invalid URL', { status: 403 }); }
   }
-  const object = await env.PHOTOS.get(String(photo.object_key));
+  const object = await photoStore(env).get(String(photo.object_key));
   if (!object) return new Response('Not found', { status: 404 });
   const headers = new Headers({ 'cache-control': 'private, no-store', 'x-content-type-options': 'nosniff', 'content-disposition': 'inline' });
   headers.set('content-type', object.httpMetadata?.contentType || 'application/octet-stream');

@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "manotas-pruebas",
+  "account_id": "1e1c123bdaf87e6caa9764dcee7f4d8b",
+  "main": "dist/index.js",
+  "build": { "command": "node scripts/build.mjs" },
+  "no_bundle": true,
+  "compatibility_date": "2026-10-20",
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": true },
+  "observability": { "enabled": true },
+  "vars": { "PHOTO_STORAGE": "d1-test" },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "manotas-test-db",
+    "database_id": "e96f46d1-89c6-43f4-8250-c54d7b3fd692",
+    "migrations_dir": "migrations"
+  }]
+}

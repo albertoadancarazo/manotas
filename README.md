@@ -5,7 +5,26 @@
 Workers + D1 + R2: autenticación revocable, órdenes por técnico, QR por audiencia,
 fotos privadas, portales de consulta, dashboard de administración e informes PDF.
 La demo comercial vive en `public/demo/index.html`; `/` la sirve mediante ASSETS.
-No se ha desplegado esta revisión ni provisionado infraestructura remota.
+Entorno de pruebas desplegado: https://manotas-pruebas.alberto-adan-carazo.workers.dev
+
+### Pruebas en Cloudflare
+
+- Acceso: `/login.html`. Administración: `/admin/dashboard`. Técnicos: `/taller`.
+- Existe una orden sintética OT-DEMO-001 y usuarios de los tres roles.
+- Credenciales, JWT y enlaces de consulta están fuera de Git, en `.wrangler/`.
+  No ejecutar de nuevo el SQL de datos sintéticos sobre la base ya inicializada.
+- Configuración independiente: `wrangler.test.jsonc`; base D1 `manotas-test-db`.
+- R2 no está activado en la cuenta. Solo el entorno de pruebas usa fotos privadas
+  en D1, con límite de 2 MB por imagen. Producción mantiene el adaptador R2.
+- La respuesta del entorno de pruebas lleva `X-Robots-Tag: noindex, nofollow`.
+- No se han conectado dominios ni activado proveedores de notificaciones o pagos.
+- Se verificó por HTTPS: login de los tres roles, dashboard, orden del técnico,
+  expediente/PDF de aseguradora, cambio de estado, QR, fotos y revocación de sesión.
+
+Para cambios posteriores autorizados: `npm run deploy:test`.
+Para nuevas migraciones aditivas autorizadas: `npm run db:migrate:test`.
+El wrapper usa el empaquetador portable y una sesión local de Cloudflare fuera de Git;
+en otra máquina hay que iniciar sesión con Wrangler antes de desplegar.
 
 ### Comprobaciones
 
@@ -68,7 +87,7 @@ El PDF actual incluye metadatos de fotografías; no incorpora los binarios de im
 
 ### Infraestructura y trabajo pendiente
 
-Antes de un despliegue autorizado hay que sustituir el `database_id` de ejemplo,
+Antes de un despliegue de producción autorizado hay que sustituir el `database_id` de ejemplo,
 configurar D1/R2 y `JWT_SECRET`, aplicar migraciones y validar límites del plan real
 (en particular CPU del login Argon2id). La configuración ASSETS ya está incluida.
 No se han creado cuentas, dominios ni servicios de pago.

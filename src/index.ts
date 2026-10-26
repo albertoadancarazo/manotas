@@ -16,6 +16,7 @@ const { queries } = await import('./db/queries');
 export interface Env {
   DB: D1Database;
   PHOTOS: R2Bucket;
+  PHOTO_STORAGE?: 'd1-test';
   JWT_SECRET: string;
   ASSETS: Fetcher;
   BASE_URL?: string;
@@ -198,5 +199,6 @@ export default { async fetch(request: Request,env: Env): Promise<Response> {
   const headers = new Headers(response.headers);
   headers.set('x-content-type-options','nosniff'); headers.set('referrer-policy','no-referrer'); headers.set('x-frame-options','DENY');
   headers.set('cache-control','no-store');
+  if (env.PHOTO_STORAGE === 'd1-test') headers.set('x-robots-tag','noindex, nofollow');
   return new Response(response.body,{status:response.status,headers});
 }};

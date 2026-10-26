@@ -48,3 +48,7 @@ Hereda `ai-hub/AGENTS.md`: merge, deploy, push a main, borrados, migraciones des
 6. Fotos privadas no son públicas por URL directa.
 7. Dashboard permite filtrar órdenes activas.
 8. Build y migraciones documentados.
+
+## Entorno de pruebas
+URL: https://manotas-pruebas.alberto-adan-carazo.workers.dev
+Config: wrangler.test.jsonc. D1: manotas-test-db. Fotos D1 solo pruebas; R2 para producción.

@@ -12,7 +12,9 @@
     "test": "node scripts/test.mjs",
     "build": "node scripts/build.mjs",
     "admin:sql": "node scripts/admin-sql.mjs",
-    "test:worker": "node scripts/smoke-worker.mjs"
+    "test:worker": "node scripts/smoke-worker.mjs",
+    "deploy:test": "node scripts/cloudflare.mjs deploy --config wrangler.test.jsonc",
+    "db:migrate:test": "node scripts/cloudflare.mjs d1 migrations apply manotas-test-db --remote --config wrangler.test.jsonc"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20261019.1",

@@ -172,3 +172,16 @@ test('summary PDF handles historical events and upload rejects mismatched events
     assert.equal((await f.request('/api/photos/upload',cookie,'POST',form)).status,400);
   }
 });
+
+test('staging D1 photo storage preserves bytes and applies the explicit 2 MB limit',async()=>{
+  const f=fixture();f.env.PHOTO_STORAGE='d1-test';
+  const cookie=await f.cookie('tech','TECHNICIAN');
+  const bytes=new Uint8Array(70000).map((_,i)=>i%256);
+  const form=new FormData();form.set('file',new File([bytes],'photo.jpg',{type:'image/jpeg'}));form.set('workOrderId','order');form.set('category','CHAPA');
+  const uploaded=await f.request('/api/photos/upload',cookie,'POST',form);assert.equal(uploaded.status,201);
+  const photo=await uploaded.json() as any;
+  const response=await f.request('/api/photos/'+photo.id+'/content',cookie);
+  assert.deepEqual(new Uint8Array(await response.arrayBuffer()),bytes);
+  const large=new FormData();large.set('file',new File([new Uint8Array(2*1024*1024+1)],'large.jpg',{type:'image/jpeg'}));large.set('workOrderId','order');large.set('category','CHAPA');
+  assert.equal((await f.request('/api/photos/upload',cookie,'POST',large)).status,413);
+});

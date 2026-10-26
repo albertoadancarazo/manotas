@@ -6,7 +6,7 @@ fs.mkdirSync('.test-build',{recursive:true});
 fs.writeFileSync('.test-build/smoke-auth.js',ts.transpileModule(fs.readFileSync('src/auth.ts','utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText);
 const { hashPassword } = await import('../.test-build/smoke-auth.js');
 const mf=new Miniflare(convertV4MiniflareOptions({modules:true,script:fs.readFileSync('dist/index.js','utf8'),compatibilityDate:'2026-10-20',
- bindings:{JWT_SECRET:'local-smoke-secret-at-least-32-characters'},d1Databases:['DB'],r2Buckets:['PHOTOS'],serviceBindings:{ASSETS:()=>new Response('demo')}}));
+ bindings:{JWT_SECRET:'local-smoke-secret-at-least-32-characters',PHOTO_STORAGE:process.env.MANOTAS_PHOTO_STORAGE || ''},d1Databases:['DB'],r2Buckets:['PHOTOS'],serviceBindings:{ASSETS:()=>new Response('demo')}}));
 try {
  const db=await mf.getD1Database('DB');
  for(const file of fs.readdirSync('migrations').sort()) for(const sql of fs.readFileSync('migrations/'+file,'utf8').split(';').map(s=>s.trim()).filter(Boolean)) await db.prepare(sql).run();
@@ -26,5 +26,5 @@ try {
  assert.equal(upload.status,201,await upload.clone().text());
  const photo=await upload.json(); const image=await mf.dispatchFetch('https://test.local/api/photos/'+photo.id+'/content',{headers:{Cookie:cookie}});
  assert.equal(image.status,200);assert.equal(image.headers.get('content-type'),'image/jpeg');
- console.log('Worker smoke passed: real workerd + D1 migrations + login + QR + R2 upload/read.');
+ console.log('Worker smoke passed: real workerd + D1 migrations + login + QR + '+(process.env.MANOTAS_PHOTO_STORAGE==='d1-test'?'D1 test storage':'R2')+' upload/read.');
 } finally {await mf.dispose();}

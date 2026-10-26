@@ -1,4 +1,5 @@
 import { orderAccess } from '../security';
+import { photoStore } from '../utils/photo-store';
 import { signedPhotoUrl } from './photo-content';
 import { verifySession } from "../auth";
 import { putPhoto, validateUpload } from "../utils/r2";
@@ -41,13 +42,14 @@ export const uploadRoutes = {
       if (!event) return json({ error: 'invalid_event' }, 400);
     }
     const validation = validateUpload(file);
+    if (env.PHOTO_STORAGE === 'd1-test' && file.size > 2 * 1024 * 1024) return json({error:'test_photo_limit_2mb'},413);
     if (!validation.ok) return json({ error: validation.error }, validation.error === "file_too_large" ? 413 : 415);
     
     const arrayBuffer = await file.arrayBuffer();
     const objectKey = `photos/${workOrderId}/${generateUUID()}-${file.name}`;
     const thumbnailKey = null;
     
-    await putPhoto(env.PHOTOS, objectKey, arrayBuffer, file.type);
+    await putPhoto(photoStore(env), objectKey, arrayBuffer, file.type);
     
     const photoId = generateUUID();
     await env.DB.prepare(`
