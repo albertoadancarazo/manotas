@@ -2,31 +2,29 @@
 
 active_agent: none
 branch: chatgpt/bootstrap
-base_commit: 143a0e51f79d604415407ad087baaf1ba9eb7f5b
+base_commit: ef080ffd849b8515da38148e3e5e6927dce70563
 date: 2026-10-26
 
-## Relevo
-- Revisados y conservados los 18 commits locales previos.
-- Corregidos QR, fotos privadas, permisos por orden y sesiones revocables.
-- Dashboard ajustado a los arrays reales de la API; login y listado técnico añadidos.
-- PDF conectado al router y filtrado por audiencia; dependencia declarada.
-- Migración 0004 enlaza usuarios aseguradora con su organización.
-- ASSETS configurado; / sirve la demo comercial.
-- Notificaciones conservadas como módulos opcionales, sin envíos activados.
+## Despliegue autorizado y operativo
+- URL: https://manotas-pruebas.alberto-adan-carazo.workers.dev
+- Worker: manotas-pruebas. Config: wrangler.test.jsonc.
+- D1: manotas-test-db; migraciones 0001 a 0005 aplicadas.
+- R2 no activado en la cuenta; no se activó facturación.
+- Fotos privadas provisionales en D1 (solo PHOTO_STORAGE=d1-test), máximo 2 MB.
+- Producción mantiene adaptador R2 y su configuración independiente.
+- JWT_SECRET configurado; usuarios sintéticos admin/técnico/aseguradora y OT-DEMO-001.
+- Credenciales y enlaces tokenizados solo en .wrangler/test-access.json, fuera de Git.
+- Versión desplegada: 557a3ae8-0ac7-4243-b8ce-7427e7e9a562.
 
-## Validación
-- TypeScript sin errores y bundle ESM generado con esbuild WASM.
-- 10 pruebas de regresión pasan con SQLite real en memoria.
-- Smoke workerd + D1 + R2: migraciones, login, QR, subida y lectura privada pasan.
-- npm audit: cero vulnerabilidades al cerrar esta revisión.
-- No se ha hecho despliegue ni migración remota.
-
-## Transporte a GitHub
-- Subida por API: 20 commits reproducidos con referencia Original-local-commit; hashes nuevos.
-- El worktree original conserva hashes locales antiguos; no asumir sincronía por el nombre de rama.
-- La copia de reparación está alineada con la rama remota; historial local previo conservado en chatgpt/local-before-api-upload.
+## Verificación
+- 11 regresiones pasan; tipos y build pasan.
+- Workerd/D1 local con adaptador de fotos de pruebas pasa.
+- HTTPS real: 3 logins, dashboard, técnico, aseguradora/PDF, estados, QR, fotos y logout pasan.
+- Noindex configurado para el entorno de pruebas.
+- No hay notificaciones ni cobros conectados.
 
 ## Continuar
-Leer STATE y NEXT; README contiene comandos reproducibles y arranque local.
-El worktree original de OpenCode se conservó; recuperar la rama remota antes de continuar allí.
-Infraestructura remota, configuración real y funciones aún pendientes: NEXT.
+- README explica despliegue reproducible y límites; NEXT contiene lo pendiente para producción.
+- scripts/cloudflare.mjs utiliza esbuild portable y sesión local ignorada por Git.
+- El worktree original de OpenCode sigue intacto y conserva hashes anteriores a la subida API.
+- La copia de reparación sigue la rama remota; conservar el historial original antes de sincronizar otros worktrees.

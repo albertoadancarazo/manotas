@@ -29,3 +29,9 @@ Evita incompatibilidad del addon Node en Workers y permite revocar acceso sin es
 Status: ACCEPTED
 Leer R2 por Worker con alcance de orden/audiencia y revalidación del token o sesión.
 La firma temporal no sustituye el permiso vigente y no convierte el bucket en público.
+
+## D-008 - Fotos provisionales D1 solo para pruebas
+Status: ACCEPTED
+La cuenta no tiene R2 activado. Para el despliegue de pruebas autorizado se usa
+PHOTO_STORAGE=d1-test, con datos sintéticos, control de acceso idéntico y límite de 2 MB.
+No se activa facturación; producción conserva R2 y requiere su configuración explícita.

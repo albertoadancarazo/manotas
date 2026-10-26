@@ -1,35 +1,31 @@
 # NEXT - Manotas
 
 ## Hecho reciente
-- [x] Corregir QR y portales con tokens rotables.
-- [x] Servir fotos privadas reales, filtrar por audiencia y orden.
-- [x] Revocar sesiones y comprobar usuarios activos en servidor.
-- [x] Corregir relación usuario/aseguradora y acceso por expediente.
-- [x] Integrar PDF, login y dashboard; recuperar tipos y build.
-- [x] Añadir regresión SQLite y smoke workerd/D1/R2; dependencias sin avisos de auditoría.
-- [x] Documentar arranque y relevo reproducibles.
+- [x] Corregir QR, fotos privadas, alcance por orden, sesiones revocables y PDF.
+- [x] Desplegar manotas-pruebas en workers.dev por autorización del usuario.
+- [x] Crear D1 de pruebas y aplicar migraciones 0001 a 0005.
+- [x] Configurar JWT y datos sintéticos con tres roles y OT-DEMO-001.
+- [x] Probar HTTPS real: logins, dashboard, estados, QR, fotos, PDF y logout.
+- [x] 11 regresiones, tipos, build y runtime local pasan.
 
 ## P0 - Antes de producción
-- [ ] Identificar/configurar D1 y R2 reales y sustituir database_id de ejemplo.
-- [ ] Configurar JWT_SECRET real y aplicar migraciones con autorización de publicación.
-- [ ] Vincular usuarios aseguradora existentes a su organización mediante migración 0004.
-- [ ] Crear primer administrador sin credenciales por defecto; README incluye generador SQL.
-- [ ] Validar límites CPU/memoria del login Argon2id en el plan de Cloudflare elegido.
-- [ ] Validar navegación, cámara/escaneo y fotos desde móvil real.
-- [ ] Completar alta de órdenes/vehículos y formulario comercial conectado al backend.
+- [ ] Validación visual y cámara/escaneo desde móvil real por el usuario.
+- [ ] Completar alta de órdenes/vehículos y formulario comercial conectado.
+- [ ] Activar/configurar R2 con autorización si se decide pasar a producción.
+- [ ] Separar/provisionar D1 y usuarios definitivos; sustituir configuración de producción de ejemplo.
+- [ ] Definir retención/borrado de fotos y datos, y rate limiting de login.
+- [ ] Confirmar datos comerciales y completar revisión de permisos con usuarios definitivos.
 
 ## P1
-- [ ] Activar proveedores de notificación solo con configuración y autorización; implementar firmas de webhook, consentimiento, cola y reintentos.
-- [ ] Rate limiting de login y política de expiración/retención antes de exposición pública.
-- [ ] Completar fotos embebidas y paginación de contenido largo en PDF.
-- [ ] Confirmar teléfonos, horarios, servicios y aseguradoras reales.
-- [ ] Automatizar CI con los comandos documentados y renovar pruebas si cambian permisos.
+- [ ] Integrar notificaciones con consentimiento, firmas de webhook, cola y reintentos.
+- [ ] Fotos embebidas y paginación de contenido largo en PDF.
+- [ ] Automatizar CI con los comandos documentados.
 
 ## P2
-- [ ] Firma/autorización digital.
-- [ ] Métricas de tiempos por fase.
+- [ ] Firma/autorización digital y métricas por fase.
 
-## Bloqueos
-- La revisión autorizó correcciones y subida de rama, no despliegue ni gasto.
-- Sin configuración remota verificable no se declara producción operativa.
-- El worktree original se conservó; sincronizarlo desde GitHub para continuar allí.
+## Límites de pruebas
+- Fotos en D1 con máximo 2 MB por imagen; no se activó R2 ni facturación.
+- Datos sintéticos; no se conectaron dominios, mensajería ni pagos.
+- Accesos en .wrangler/test-access.json fuera de Git, nunca copiarlos al relevo.
+- Worktree original de OpenCode conservado; revisar historia antes de sincronizarlo.
