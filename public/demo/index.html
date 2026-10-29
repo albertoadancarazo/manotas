@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preload" as="image" href="/demo/images/hero-workshop.jpg">
+  <title>Talleres Manotas - Demo Comercial</title>
+  <style>
+    :root {
+      --grafito: #1a1a1a;
+      --marfil: #fdf6e3;
+      --naranja: #ff6b00;
+      --blanco: #ffffff;
+      --gris-claro: #e8e8e8;
+      --gris-medio: #999;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Oxanium', system-ui, -apple-system, sans-serif;
+      background: var(--marfil);
+      color: var(--grafito);
+      line-height: 1.6;
+    }
+    .hero {
+      background: linear-gradient(90deg,rgba(14,15,16,.86),rgba(14,15,16,.46)), url("/demo/images/hero-workshop.jpg") center 48% / cover;
+      color: var(--blanco);
+      padding: 80px 20px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 6vw, 56px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      font-stretch: condensed;
+    }
+    .hero p {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--gris-claro);
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 16px 32px;
+      background: var(--naranja);
+      color: var(--blanco);
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 16px;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #e85d00; }
+    .section { padding: 60px 20px; max-width: 1200px; margin: 0 auto; }
+    .section h2 {
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 700;
+      margin-bottom: 32px;
+      font-stretch: condensed;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: var(--blanco);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    .card img { width: 100%; height: 200px; object-fit: cover; }
+    .card-content { padding: 20px; }
+    .card h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+    .card p { color: var(--gris-medio); font-size: 14px; }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: var(--naranja);
+      color: var(--blanco);
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .footer {
+      background: var(--grafito);
+      color: var(--blanco);
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .footer p { color: var(--gris-medio); }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="hero">
+    <h1>Talleres Manotas</h1>
+    <p>Especialistas en chapa y pintura. Flota de sustitución. Peritación in situ.</p>
+    <a href="/login.html?next=/taller" class="btn">Demo App Técnico</a>
+  </header>
+
+  <section class="section">
+    <h2>Servicios</h2>
+    <div class="grid">
+      <article class="card">
+        <img src="/demo/images/bodywork.jpg" alt="Acabado de carrocería de un automóvil" width="900" height="600" loading="lazy" decoding="async">
+        <div class="card-content">
+          <span class="badge">Chapa</span>
+          <h3>Chapa y Pintura</h3>
+          <p>Reparación integral de carrocería con pintura al horno y acabado original.</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="/demo/images/mechanic.jpg" alt="Detalle de un motor durante su mantenimiento" width="900" height="600" loading="lazy" decoding="async">
+        <div class="card-content">
+          <span class="badge">Mecánica</span>
+          <h3>Mecánica Rápida</h3>
+          <p>Mantenimiento, frenos, suspensión y diagnóstico electrónico multimarca.</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="/demo/images/replacement-car.jpg" alt="Vehículos en circulación" width="900" height="600" loading="lazy" decoding="async">
+        <div class="card-content">
+          <span class="badge">Flota</span>
+          <h3>Vehículo Sustitución</h3>
+          <p>Flota propia de cortesía mientras reparamos tu coche. Sin esperas.</p>
+        </div>
+      </article>
+      <article class="card">
+        <img src="/demo/images/inspection.jpg" alt="Revisión técnica de un vehículo en el taller" width="900" height="600" loading="lazy" decoding="async">
+        <div class="card-content">
+          <span class="badge">Seguros</span>
+          <h3>Peritación In Situ</h3>
+          <p>Trabajamos con todas las aseguradoras. Perito en nuestras instalaciones.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--grafito); color: var(--blanco);">
+    <h2>App de Seguimiento por QR</h2>
+    <p style="max-width: 600px; margin: 0 auto 32px; color: var(--gris-claro);">
+      Cada orden de trabajo tiene su código QR. El técnico escanea, ve el estado, sube fotos y avanza fases en segundos. El cliente y la aseguradora ven su portal de solo lectura.
+    </p>
+    <div class="grid" style="max-width: 800px; margin: 0 auto;">
+      <div class="card" style="background: #2a2a2a; text-align: center; padding: 40px 20px;">
+        <div style="font-size: 48px; margin-bottom: 16px;">📱</div>
+        <h3>Técnico</h3>
+        <p>Escanea QR → Ve orden → Sube fotos → Avanza estado</p>
+      </div>
+      <div class="card" style="background: #2a2a2a; text-align: center; padding: 40px 20px;">
+        <div style="font-size: 48px; margin-bottom: 16px;">👤</div>
+        <h3>Cliente</h3>
+        <p>Portal de seguimiento con fotos autorizadas y fecha estimada</p>
+      </div>
+      <div class="card" style="background: #2a2a2a; text-align: center; padding: 40px 20px;">
+        <div style="font-size: 48px; margin-bottom: 16px;">🏢</div>
+        <h3>Aseguradora</h3>
+        <p>Acceso a expediente, fotos de daños y documentación pericial</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Talleres Manotas · Chapa y Pintura · Flota Sustitución · Peritación In Situ</p>
+    <p style="margin-top: 16px; font-size: 14px;">Demo comercial - Referencia visual para desarrollo</p>
+  </footer>
+</body>
+</html>

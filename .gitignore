@@ -1,0 +1,14 @@
+.worktrees/
+
+node_modules/
+.npm-cache/
+.wrangler/
+dist/
+.dev.vars
+.env*
+
+.test-build/
+.worker-build/
+admin-*.sql
+repair*.mjs
+finish.mjs
