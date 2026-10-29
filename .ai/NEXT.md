@@ -1,6 +1,7 @@
 # NEXT - Manotas
 
 ## Hecho reciente
+- [x] Reproducir fallo techs.results y guardar corrección del listado en GitHub (aún no desplegada).
 - [x] Publicar hero y fotos de servicios; retirar placeholders y verificar imágenes remotas.
 - [x] Corregir QR, fotos privadas, alcance por orden, sesiones revocables y PDF.
 - [x] Desplegar manotas-pruebas en workers.dev por autorización del usuario.
@@ -10,6 +11,7 @@
 - [x] 11 regresiones, tipos, build y runtime local pasan.
 
 ## P0 - Antes de producción
+- [ ] Recuperar ejecución de Work y desplegar corrección de órdenes 40dfb1d; validar filas y filtros reales.
 - [ ] Validación visual y cámara/escaneo desde móvil real por el usuario.
 - [ ] Completar alta de órdenes/vehículos y formulario comercial conectado.
 - [ ] Activar/configurar R2 con autorización si se decide pasar a producción.
