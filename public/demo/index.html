@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preload" as="image" href="/demo/images/hero-workshop.jpg">
   <title>Talleres Manotas - Demo Comercial</title>
   <style>
     :root {
@@ -21,7 +22,7 @@
       line-height: 1.6;
     }
     .hero {
-      background: var(--grafito);
+      background: linear-gradient(90deg,rgba(14,15,16,.86),rgba(14,15,16,.46)), url("/demo/images/hero-workshop.jpg") center 48% / cover;
       color: var(--blanco);
       padding: 80px 20px;
       text-align: center;
@@ -101,14 +102,14 @@
   <header class="hero">
     <h1>Talleres Manotas</h1>
     <p>Especialistas en chapa y pintura. Flota de sustitución. Peritación in situ.</p>
-    <a href="/taller/orden/demo" class="btn">Demo App Técnico</a>
+    <a href="/login.html?next=/taller" class="btn">Demo App Técnico</a>
   </header>
 
   <section class="section">
     <h2>Servicios</h2>
     <div class="grid">
       <article class="card">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'%3E%3Crect fill='%23e8e8e8' width='400' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23999' font-family='system-ui' font-size='16'%3EChapa %26 Pintura%3C/text%3E%3C/svg%3E" alt="Chapa y pintura">
+        <img src="/demo/images/bodywork.jpg" alt="Acabado de carrocería de un automóvil" width="900" height="600" loading="lazy" decoding="async">
         <div class="card-content">
           <span class="badge">Chapa</span>
           <h3>Chapa y Pintura</h3>
@@ -116,7 +117,7 @@
         </div>
       </article>
       <article class="card">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'%3E%3Crect fill='%23e8e8e8' width='400' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23999' font-family='system-ui' font-size='16'%3EMecánica%3C/text%3E%3C/svg%3E" alt="Mecánica">
+        <img src="/demo/images/mechanic.jpg" alt="Detalle de un motor durante su mantenimiento" width="900" height="600" loading="lazy" decoding="async">
         <div class="card-content">
           <span class="badge">Mecánica</span>
           <h3>Mecánica Rápida</h3>
@@ -124,7 +125,7 @@
         </div>
       </article>
       <article class="card">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'%3E%3Crect fill='%23e8e8e8' width='400' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23999' font-family='system-ui' font-size='16'%3EVehículo Sustitución%3C/text%3E%3C/svg%3E" alt="Vehículo sustitución">
+        <img src="/demo/images/replacement-car.jpg" alt="Vehículos en circulación" width="900" height="600" loading="lazy" decoding="async">
         <div class="card-content">
           <span class="badge">Flota</span>
           <h3>Vehículo Sustitución</h3>
@@ -132,7 +133,7 @@
         </div>
       </article>
       <article class="card">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'%3E%3Crect fill='%23e8e8e8' width='400' height='200'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23999' font-family='system-ui' font-size='16'%3EPeritación%3C/text%3E%3C/svg%3E" alt="Peritación">
+        <img src="/demo/images/inspection.jpg" alt="Revisión técnica de un vehículo en el taller" width="900" height="600" loading="lazy" decoding="async">
         <div class="card-content">
           <span class="badge">Seguros</span>
           <h3>Peritación In Situ</h3>
