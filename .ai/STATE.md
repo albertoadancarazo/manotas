@@ -1,7 +1,7 @@
 # STATE - Manotas
 
 ## Código actual
-- Rama: chatgpt/bootstrap; corrección visual de la demo en 6d7ae3e.
+- Rama: chatgpt/bootstrap; corrección del listado en 40dfb1d, pendiente de desplegar.
 - Stack: Workers + D1 + R2; demo comercial en public/demo/index.html.
 - Autenticación Argon2id portable, cookies HttpOnly/Secure, JWT con sesión D1 de 24 horas.
 - Logout revoca sesión; usuarios inactivos y cambios de rol se consultan en servidor.
@@ -34,6 +34,12 @@
 - ASSETS sirve demo y login; noindex en todas las respuestas de pruebas.
 - Versión Cloudflare: d866e214-e0d0-4e95-9214-283a08c22e49.
 - Proveedores de notificación conservados pero sin envíos activados.
+
+## Corrección de órdenes pendiente de publicación
+- GitHub: corregido acceso al array de técnicos, enlaces de referencias, búsqueda con nulos y estados vacíos.
+- JavaScript simulado: carga, enlace, búsqueda, nulos y tabla vacía pasan.
+- Despliegue bloqueado por acceso denegado al iniciar el entorno local de Work.
+- Cloudflare aún ejecuta la versión anterior; /taller ofrece la vista alternativa de órdenes.
 
 ## Validación actual
 - npm run typecheck: pasa.
