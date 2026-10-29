@@ -2,8 +2,8 @@
 
 active_agent: none
 branch: chatgpt/bootstrap
-base_commit: ef080ffd849b8515da38148e3e5e6927dce70563
-date: 2026-10-26
+base_commit: 6d7ae3ef709060276635cf2b4a8efa85177f0eb7
+date: 2026-10-29
 
 ## Despliegue autorizado y operativo
 - URL: https://manotas-pruebas.alberto-adan-carazo.workers.dev
@@ -14,7 +14,13 @@ date: 2026-10-26
 - Producción mantiene adaptador R2 y su configuración independiente.
 - JWT_SECRET configurado; usuarios sintéticos admin/técnico/aseguradora y OT-DEMO-001.
 - Credenciales y enlaces tokenizados solo en .wrangler/test-access.json, fuera de Git.
-- Versión desplegada: 557a3ae8-0ac7-4243-b8ce-7427e7e9a562.
+- Versión desplegada: d866e214-e0d0-4e95-9214-283a08c22e49.
+
+## Corrección de imágenes
+- Hero original recuperado y cuatro SVG de relleno sustituidos por fotografías locales.
+- Cinco JPEG publicados bajo /demo/images; funcionan en / y /demo/.
+- Verificados HTTP 200, MIME image/jpeg y bytes idénticos a los archivos locales.
+- Fuentes documentadas en docs/DEMO-IMAGE-SOURCES.md; fotos ilustrativas.
 
 ## Verificación
 - 11 regresiones pasan; tipos y build pasan.

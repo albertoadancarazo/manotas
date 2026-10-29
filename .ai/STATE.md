@@ -1,7 +1,7 @@
 # STATE - Manotas
 
 ## Código actual
-- Rama: chatgpt/bootstrap; código del despliegue de pruebas en ef080ff.
+- Rama: chatgpt/bootstrap; corrección visual de la demo en 6d7ae3e.
 - Stack: Workers + D1 + R2; demo comercial en public/demo/index.html.
 - Autenticación Argon2id portable, cookies HttpOnly/Secure, JWT con sesión D1 de 24 horas.
 - Logout revoca sesión; usuarios inactivos y cambios de rol se consultan en servidor.
@@ -28,8 +28,11 @@
 - R2 no está activado en la cuenta; no se modificó facturación.
 - Fotos de pruebas almacenadas en D1, explícitamente PHOTO_STORAGE=d1-test; máximo 2 MB.
 - El modo producción sigue usando R2; wrangler.jsonc conserva database_id de ejemplo.
+- Demo: hero original y cuatro imágenes de servicios locales, sin SVG de relleno.
+- Fotografías ilustrativas con fuentes en docs/DEMO-IMAGE-SOURCES.md.
+- Imágenes verificadas por HTTPS (200, MIME y bytes); acceso técnico del hero apunta al login real.
 - ASSETS sirve demo y login; noindex en todas las respuestas de pruebas.
-- Versión Cloudflare: 557a3ae8-0ac7-4243-b8ce-7427e7e9a562.
+- Versión Cloudflare: d866e214-e0d0-4e95-9214-283a08c22e49.
 - Proveedores de notificación conservados pero sin envíos activados.
 
 ## Validación actual

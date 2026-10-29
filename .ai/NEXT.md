@@ -1,6 +1,7 @@
 # NEXT - Manotas
 
 ## Hecho reciente
+- [x] Publicar hero y fotos de servicios; retirar placeholders y verificar imágenes remotas.
 - [x] Corregir QR, fotos privadas, alcance por orden, sesiones revocables y PDF.
 - [x] Desplegar manotas-pruebas en workers.dev por autorización del usuario.
 - [x] Crear D1 de pruebas y aplicar migraciones 0001 a 0005.
